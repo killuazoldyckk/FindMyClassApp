@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/blue"
+    tools:context=".BookingClassActivity">
+
+
+    <ImageView
+        android:id="@+id/exit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/exit_btn"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="354dp"
+        android:contentDescription="@string/cdImageView" />
+
+    <TextView
+        android:id="@+id/rectangle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/sks_1"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:background="@drawable/rectangle_1"/>
+
+    <TextView
+        android:id="@+id/jlh_sks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/jlh_sks"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center"/>
+
+    <Spinner
+        android:id="@+id/dropdown"
+        android:entries="@array/numbers"
+        android:layout_width="116dp"
+        android:layout_height="36dp"
+        app:layout_constraintTop_toBottomOf="@+id/jlh_sks"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_dropdown"
+        android:dropDownVerticalOffset="40dp"/>
+
+    <TextView
+        android:id="@+id/booking_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/dropdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="5dp"
+        android:text="@string/booking_class"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:background="@drawable/bookingbg"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
+

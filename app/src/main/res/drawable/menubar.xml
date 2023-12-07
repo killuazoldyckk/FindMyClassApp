@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Content Layer (Your original shape) -->
+    <item android:left="2dp" android:right="2dp" android:top="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" /> <!-- Background color -->
+            <corners android:radius="20dp" /> <!-- Rounded corners if needed -->
+        </shape>
+    </item>
+</layer-list>

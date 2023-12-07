@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "217513756749",
+    "firebase_url": "https://findmyclass-c5f55-default-rtdb.firebaseio.com",
+    "project_id": "findmyclass-c5f55",
+    "storage_bucket": "findmyclass-c5f55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217513756749:android:574ea68ec419f70d23f404",
+        "android_client_info": {
+          "package_name": "com.cc.findmyclasskotlin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoAENd363fikyHdVt-neS13xWWlcdHQxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

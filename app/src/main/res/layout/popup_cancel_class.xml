@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:padding="20dp"
+        android:background="@drawable/popupbg"
+        android:shadowColor="#FFF62D"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:id="@+id/cancel_class_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center_horizontal|top"
+            android:text="@string/cancel_class"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/cancel_class_text"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:id="@+id/no_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_bg"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:text="@string/tidak"
+                android:paddingHorizontal="25dp"
+                android:textColor="@color/midblue"
+                android:textSize="16sp"
+                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_bg"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:paddingHorizontal="25dp"
+                android:text="@string/ya"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/midblue"
+                android:textSize="16sp"
+                 />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+</LinearLayout>

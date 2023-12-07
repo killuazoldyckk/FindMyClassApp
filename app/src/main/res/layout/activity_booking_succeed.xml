@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue">
+
+    <ImageView
+        android:id="@+id/exit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/exit_btn"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="354dp"
+        android:contentDescription="@string/cdImageView" />
+
+    <ImageView
+        android:id="@+id/rectangle_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/booking_succeed"
+        android:contentDescription="@string/cdImageView"/>
+
+    <ImageView
+        android:id="@+id/check_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/baseline_check_24"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="290dp"
+        android:contentDescription="@string/cdImageView"/>
+
+    <TextView
+        android:id="@+id/booked_succeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/class_booked"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="380dp"/>
+
+    <TextView
+        android:layout_width="108dp"
+        android:layout_height="42dp"
+        android:text="@string/ok"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="25sp"
+        android:background="@drawable/ok_bg"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="420dp"/>
+
+
+
+</RelativeLayout>

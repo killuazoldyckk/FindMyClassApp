@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".LoginActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/back" />
+
+        <LinearLayout
+            android:id="@+id/formNIM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintTop_toBottomOf="@id/backButton">
+
+            <TextView
+                android:id="@+id/textViewNIM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nim"
+                android:textSize="20sp"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/blue"
+                />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editTextNIM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nim_hint"
+                android:minHeight="48dp"
+                android:padding="5dp"
+                android:paddingStart="10dp"
+                tools:ignore="RtlSymmetry"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins_regular"
+                android:textColorHint="@color/lightblue"
+                android:background="@drawable/edit_text_bg"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/formPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintTop_toBottomOf="@id/formNIM">
+
+            <TextView
+                android:id="@+id/textViewPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pass"
+                android:textSize="20sp"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/blue"
+                />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pass_hint"
+                android:minHeight="48dp"
+                android:padding="5dp"
+                android:paddingStart="10dp"
+                tools:ignore="RtlSymmetry"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins_regular"
+                android:textColorHint="@color/lightblue"
+                android:background="@drawable/edit_text_bg"/>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/formPass"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/button_bg"
+            android:text="@string/masuk"
+            android:textAllCaps="false"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/white"
+            android:layout_marginTop="25dp"
+            android:paddingHorizontal="60dp"/>
+
+        <LinearLayout
+            android:id="@+id/forgetPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/forgetpsw"
+                android:layout_marginEnd="5dp"
+                />
+
+            <TextView
+                android:id="@+id/forgetpswBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/blue"
+                android:text="@string/forgetpswbtn"
+                />
+
+        </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toBottomOf="@+id/forgetPass"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           android:orientation="vertical"
+           android:gravity="center"
+           android:layout_marginVertical="120dp"
+           >
+
+           <TextView
+               android:id="@+id/registTextView"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/no_account"
+               android:fontFamily="@font/poppins_regular"/>
+
+           <TextView
+               android:id="@+id/registBtn"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/daftar"
+               android:fontFamily="@font/poppins_regular"
+               android:textColor="@color/blue"
+               />
+
+       </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

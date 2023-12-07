@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">FindMyClass</string>
+    <string name="back">BackButon</string>
+    <string name="choose_profile">Siapa Kamu ?</string>
+    <string name="profile1">Komting</string>
+    <string name="profile2">Mahasiswa/Dosen</string>
+    <string name="nim">Nomor Induk Mahasiswa</string>
+    <string name="nama">Nama Lengkap</string>
+    <string name="nama_hint">Masukkan Nama Lengkap</string>
+    <string name="prodi">Prodi</string>
+    <string name="prodi_hint">Masukkan Nama Prodi</string>
+    <string name="email">E-Mail</string>
+    <string name="email_hint">Masukkan Alamat E-Mail</string>
+    <string name="pass">Kata Sandi</string>
+    <string name="nim_hint">Masukkan Nomor Induk Mahasiswa</string>
+    <string name="pass_hint">Masukkan Kata Sandi</string>
+    <string name="masuk">Masuk</string>
+    <string name="regist">Daftar</string>
+    <string name="forgetpsw">Lupa Kata Sandi?</string>
+    <string name="forgetpswbtn">Klik Disini!</string>
+    <string name="daftar">Daftar Disini</string>
+
+    <string name="sample_nama">Andhika Mandalanta</string>
+    <string name="sample_status">Mahasiswa</string>
+    <string name="sample_nim">211401076</string>
+
+    <string name="general">GENERAL</string>
+    <string name="setting">SETTING</string>
+    <string name="help_support">HELP &amp; SUPPORT</string>
+    <string name="follow_us">FOLLOW US</string>
+    <string name="ig">Instagram</string>
+    <string name="twitter">Twitter</string>
+    <string name="fb">Facebook</string>
+    <string name="linked_in">Linked In</string>
+    <string name="logout">LOGOUT</string>
+
+
+    <string name="day1">Monday</string>
+    <string name="day2">Tuesday</string>
+    <string name="day3">Wednesday</string>
+    <string name="day4">Thursday</string>
+    <string name="day5">Friday</string>
+
+    <string name="time1">08.00-08.50</string>
+    <string name="time2">13.00-15.30</string>
+
+    <string name="room1">Ruang 101</string>
+    <string name="room2">Ruang 102</string>
+    <string name="room3">Ruang 103</string>
+    <string name="room4">Ruang 104</string>
+    <string name="room5">Ruang 105</string>
+    <string name="room6">Ruang 106</string>
+
+    <string name="no_account">Belum Punya Akun ?</string>
+
+
+    <string name="menu1">Home</string>
+    <string name="menu2">History</string>
+    <string name="menu3">Account</string>
+
+    <string name="booking">Booking</string>
+
+
+    <string name="cdImageView">Gambar</string>
+    <string name="ruang_kosong">Ruang Kosong</string>
+    <string name="sks_1">1 SKS = 50 menit</string>
+    <string name="jlh_sks">Masukan Jumlah SKS</string>
+    <string name="booking_class">Booking Class</string>
+    <string-array name="numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string name="class_booked">Class Successfully Booked</string>
+    <string name="ok">OK</string>
+    <string name="no_notif1">No Notifications Yet</string>
+    <string name="no_notif2">You have no notifications right now.</string>
+    <string name="no_notif3">Come back later</string>
+    <string name="no_class1">No Classes Booked</string>
+    <string name="no_class2">You can book classes from the home</string>
+    <string name="no_class3">menu</string>
+    <string name="cancel_class">Apakah Kamu yakin ingin membatalan kelas ini?</string>
+    <string name="tidak">Tidak</string>
+    <string name="ya">Iya</string>
+    <string name="ruang_102">Ruang 102</string>
+    <string name="besaran_sks">Besaran SKS:</string>
+    <string name="sks_3">3 SKS</string>
+    <string name="selasa">Hari Selasa</string>
+    <string name="jadwal">Pukul 13.00 - 15.30</string>
+    <string name="cancel">Cancel Class</string>
+</resources>

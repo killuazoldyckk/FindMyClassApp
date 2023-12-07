@@ -3,6 +3,7 @@ package com.cc.findmyclasskotlin
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cc.findmyclasskotlin.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -19,38 +20,41 @@ class LoginActivity : AppCompatActivity() {
         val nim = binding.editTextNIM.text.toString()
         val password = binding.editTextPassword.text.toString()
 
-        binding.loginBtn.setOnClickListener{
+        binding.loginBtn.setOnClickListener {
 
             val email = "$nim@example.com"
             mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> run {
-
-            if (task.isSuccessful()) {
-                Intent goToDashboard = new Intent(this, Dashboard.class);
-                startActivity(goToDashboard);
-            } else {
-                // Login gagal, tampilkan pesan kesalahan
-                Toast.makeText(LoginActivity.this, "Akun tidak ditemukan", Toast.LENGTH_SHORT)
-                    .show();
-            }
-        };
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        val goToDashboard = Intent(this, DashboardActivity::class.java)
+                        startActivity(goToDashboard)
+                    } else {
+                        // Login gagal, tampilkan pesan kesalahan
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Akun tidak ditemukan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
         }
 
-        binding.registBtn.setOnClickListener{
+
+        binding.registBtn.setOnClickListener {
             val goToRegister = Intent(this, RegisterActivity::class.java)
             startActivity(goToRegister)
         }
-    }
 
-    fun validateInput(nim:String,password:String): Boolean {
-        if (nim.isEmpty()) {
-            binding.editTextNIM.error = "Tidak boleh kosong"
-            return false
+        fun validateInput(nim: String, password: String): Boolean {
+            if (nim.isEmpty()) {
+                binding.editTextNIM.error = "Tidak boleh kosong"
+                return false
+            }
+            if (password.isEmpty()) {
+                binding.editTextPassword.error = "Tidak boleh kosong"
+                return false
+            }
+            return true
         }
-        if (password.isEmpty()) {
-            binding.editTextPassword.error = "Tidak boleh kosong"
-            return false
-        }
-        return true
     }
 }

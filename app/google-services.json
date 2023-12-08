@@ -8,7 +8,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:217513756749:android:574ea68ec419f70d23f404",
+        "mobilesdk_app_id": "1:362186543525:android:36e3b400a4e1f37473d84c",
+        "android_client_info": {
+          "package_name": "com.cc.findmyclasscc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD554JE54IDi7joa7dLA7EeayHUQCmI4h8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362186543525:android:fd2747e7bd39b48773d84c",
         "android_client_info": {
           "package_name": "com.cc.findmyclasskotlin"
         }
@@ -16,7 +35,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCoAENd363fikyHdVt-neS13xWWlcdHQxA"
+          "current_key": "AIzaSyD554JE54IDi7joa7dLA7EeayHUQCmI4h8"
         }
       ],
       "services": {

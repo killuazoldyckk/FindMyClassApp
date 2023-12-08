@@ -7,49 +7,41 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.cc.findmyclasskotlin.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mAuth = FirebaseAuth.getInstance();
-        val nim = binding.editTextNIM.text.toString()
-        val password = binding.editTextPassword.text.toString()
-        val nama = binding.editTextNama.text.toString()
-
+        firebaseAuth = FirebaseAuth.getInstance()
 
         binding.registerBtn.setOnClickListener {
+            val nim = binding.editTextNIM.text.toString()
+            val password = binding.editTextPassword.text.toString()
+            val nama = binding.editTextNama.text.toString()
 
             // Buat email palsu dengan format nim@example.com untuk Firebase Authentication
             val email = "$nim@example.com"
-            mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Registrasi berhasil
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        // Lakukan sesuatu dengan data pengguna yang baru terdaftar, misalnya, menyimpan nama
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(nama)
-                            .build();
-                        if (user != null) {
-                            user.updateProfile(profileUpdates);
+
+            if (nama.isNotEmpty() && nim.isNotEmpty() && password.isNotEmpty()) {
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) {
+                        if (it.isSuccessful) {
+                            // Lanjutkan ke aktivitas berikutnya setelah registrasi berhasil
+                            val goToLogin = Intent(this, LoginActivity::class.java)
+                            startActivity(goToLogin)
+                        } else {
+                            // Registrasi gagal, tampilkan pesan kesalahan
+                            Toast.makeText(this@RegisterActivity, "Registrasi gagal", Toast.LENGTH_SHORT).show()
                         }
-                        // Lanjutkan ke aktivitas berikutnya setelah registrasi berhasil
-                        val goToDashboardActivity = Intent(this, DashboardActivity::class.java)
-                        startActivity(goToDashboardActivity);
-                    } else {
-                        // Registrasi gagal, tampilkan pesan kesalahan
-                        Toast.makeText(
-                            this@RegisterActivity,
-                            "Akun tidak ditemukan",
-                            Toast.LENGTH_SHORT
-                        ).show()                    }
-                });
+                    }
+            } else {
+                Toast.makeText(this, "Semua fields harus diisi!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

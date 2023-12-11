@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    card_view:cardCornerRadius="10dp"
+    android:backgroundTint="@color/yellow">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/ruang_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Ruang 101"/>
+
+        <TextView
+            android:id="@+id/matkul_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@id/ruang_title"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Pemrograman Mobile"
+            android:layout_marginTop="14dp"/>
+
+        <TextView
+            android:id="@+id/hari_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Senin"
+            card_view:layout_constraintTop_toBottomOf="@id/matkul_text"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="14dp"/>
+
+
+        <TextView
+            android:id="@+id/waktu_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@id/hari_text"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="08.00-09.40"
+            android:layout_marginTop="14dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@+id/waktu_text"
+            android:text="Booking"
+            android:textAllCaps="false"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

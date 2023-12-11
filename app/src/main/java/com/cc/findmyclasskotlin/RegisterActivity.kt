@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.cc.findmyclasskotlin.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -29,11 +30,31 @@ class RegisterActivity : AppCompatActivity() {
 
             if (nama.isNotEmpty() && nim.isNotEmpty() && password.isNotEmpty()) {
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) {
-                        if (it.isSuccessful) {
-                            // Lanjutkan ke aktivitas berikutnya setelah registrasi berhasil
-                            val goToLogin = Intent(this, LoginActivity::class.java)
-                            startActivity(goToLogin)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Menyimpan nama pengguna ke database saat registrasi berhasil
+                            val currentUser = firebaseAuth.currentUser
+                            val userId = currentUser?.uid // Mendapatkan UID pengguna yang baru dibuat
+                            val namaUser = binding.editTextNama.text.toString()
+
+                            // Mendapatkan referensi ke database Firebase Realtime
+                            val database = FirebaseDatabase.getInstance()
+                            val usersRef = database.getReference("users")
+
+                            // Membuat entri data pengguna baru dengan nama pengguna
+                            userId?.let {
+                                val userRef = usersRef.child(it)
+                                userRef.child("nama").setValue(namaUser)
+                                    .addOnSuccessListener {
+                                        // Lanjutkan ke aktivitas berikutnya setelah registrasi berhasil
+                                        val goToLogin = Intent(this, LoginActivity::class.java)
+                                        startActivity(goToLogin)
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        // Jika gagal menyimpan, tampilkan pesan kesalahan
+                                        Toast.makeText(this@RegisterActivity, "Gagal menyimpan nama pengguna: ${exception.message}", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
                         } else {
                             // Registrasi gagal, tampilkan pesan kesalahan
                             Toast.makeText(this@RegisterActivity, "Registrasi gagal", Toast.LENGTH_SHORT).show()

@@ -75,6 +75,5 @@
         android:textColor="@color/black"
         android:background="@drawable/bookingbg"
         android:layout_gravity="center"/>
-
 </LinearLayout>
 

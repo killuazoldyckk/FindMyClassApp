@@ -54,10 +54,20 @@
             android:text="08.00-09.40"
             android:layout_marginTop="14dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
+            android:id="@+id/status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            card_view:layout_constraintTop_toBottomOf="@+id/waktu_text"
+            card_view:layout_constraintTop_toBottomOf="@id/waktu_text"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Terisi"
+            android:layout_marginTop="14dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/booking_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@+id/status_text"
             android:text="Booking"
             android:textAllCaps="false"
             card_view:layout_constraintStart_toStartOf="parent"

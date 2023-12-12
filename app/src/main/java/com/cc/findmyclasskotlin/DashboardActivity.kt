@@ -1,5 +1,6 @@
 package com.cc.findmyclasskotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -13,7 +14,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListener {
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var dbref: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
@@ -22,7 +23,6 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var user: User
     private lateinit var uid: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +39,21 @@ class DashboardActivity : AppCompatActivity() {
             getUserData()
         }
 
-
         classRecyclerView = findViewById(R.id.class_list)
         classRecyclerView.layoutManager = LinearLayoutManager(this)
         classRecyclerView.setHasFixedSize(true)
 
         roomArrayList = arrayListOf<Room>()
         getClassData()
+
+        val adapter = ListClassAdapter(roomArrayList)
+        adapter.setOnItemClickListener(this)
+        classRecyclerView.adapter = adapter
+    }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, BookingClassActivity::class.java)
+        startActivity(intent)
     }
 
     private fun getUserData() {
@@ -82,7 +90,7 @@ class DashboardActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@DashboardActivity, "Data tidak ditemukan", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -1,6 +1,9 @@
 package com.cc.findmyclasskotlin
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Room(
     val namaRuang: String?= null,
     val matkul: String?= null,
@@ -9,4 +12,4 @@ data class Room(
     val status: String?= null,
     val stambuk: String?= null,
     val kom: String?= null
-)
+) : Parcelable

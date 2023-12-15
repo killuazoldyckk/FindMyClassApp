@@ -53,6 +53,10 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this, BookingClassActivity::class.java)
+        val selectedRoom = roomArrayList[position]
+
+        intent.putExtra("SELECTED_ROOM", selectedRoom)
+
         startActivity(intent)
     }
 

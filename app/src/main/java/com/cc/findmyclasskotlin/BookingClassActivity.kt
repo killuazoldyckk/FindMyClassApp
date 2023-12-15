@@ -6,13 +6,16 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.core.view.get
 import com.cc.findmyclasskotlin.databinding.ActivityBookingClassBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class BookingClassActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBookingClassBinding
-    private lateinit var database: DatabaseReference
+    // private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +23,7 @@ class BookingClassActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val exitBtn: ImageView = findViewById(R.id.exit_btn)
+        val selectedRoom = intent.getParcelableExtra<Room>("SELECTED_ROOM")
 
         binding.bookingBtn.setOnClickListener {
 
@@ -29,7 +33,29 @@ class BookingClassActivity : AppCompatActivity() {
             val jam = binding.editTextWaktu.text.toString()
             val status = binding.dropdownStatus.selectedItem.toString()
 
-            updateData(namaRuang,matkul, hari, jam, status)
+            val database = FirebaseDatabase.getInstance()
+            val classroomReference = database.getReference("classroom")
+
+            val query = classroomReference.orderByChild("hari").equalTo(hari)
+                .orderByChild("jam").equalTo(jam)
+
+            query.addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (snapshot in dataSnapshot.children) {
+                        val uniqueId = snapshot.key
+
+                        uniqueId?.let {
+                            classroomReference.child(it).child("namaRuang").setValue(namaRuang)
+                            classroomReference.child(it).child("matkul").setValue(matkul)
+                            classroomReference.child(it).child("status").setValue(status)
+                        }
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Tangani kesalahan jika diperlukan
+                }
+            })
         }
 
         exitBtn.setOnClickListener {
@@ -38,16 +64,5 @@ class BookingClassActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateData(namaRuang: String, matkul: String, hari: String, jam: String, status: String) {
 
-        database = FirebaseDatabase.getInstance().getReference("classroom")
-        val booking = mapOf(
-            "namaRuang" to namaRuang,
-            "matkul" to matkul,
-            "hari" to hari,
-            "jam" to jam,
-            "status" to status
-        )
-
-    }
 }

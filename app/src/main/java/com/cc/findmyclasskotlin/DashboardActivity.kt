@@ -72,7 +72,7 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
 
     private fun getClassData() {
 
-        dbref = FirebaseDatabase.getInstance().getReference("ruangan")
+        dbref = FirebaseDatabase.getInstance().getReference("classroom")
 
         dbref.addValueEventListener(object : ValueEventListener{
 

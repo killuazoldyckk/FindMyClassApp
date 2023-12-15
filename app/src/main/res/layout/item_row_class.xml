@@ -24,15 +24,43 @@
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Nama Ruang:" />
+
+        <TextView
+            android:id="@+id/ruang_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/ruang_title"
+            android:layout_marginStart="6dp"
             android:text="Ruang 101"/>
+
+        <TextView
+            android:id="@+id/matkul_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@id/ruang_title"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Matkul:"
+            android:layout_marginTop="14dp"/>
 
         <TextView
             android:id="@+id/matkul_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/ruang_title"
-            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/matkul_title"
             android:text="Pemrograman Mobile"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="6dp"/>
+
+        <TextView
+            android:id="@+id/hari_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hari:"
+            card_view:layout_constraintTop_toBottomOf="@id/matkul_text"
+            card_view:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="14dp"/>
 
         <TextView
@@ -41,17 +69,36 @@
             android:layout_height="wrap_content"
             android:text="Senin"
             card_view:layout_constraintTop_toBottomOf="@id/matkul_text"
-            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/hari_title"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="14dp"/>
 
+        <TextView
+            android:id="@+id/waktu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@id/hari_text"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Jam:"
+            android:layout_marginTop="14dp"/>
 
         <TextView
             android:id="@+id/waktu_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/hari_text"
-            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/waktu_title"
+            android:layout_marginStart="6dp"
             android:text="08.00-09.40"
+            android:layout_marginTop="14dp"/>
+
+        <TextView
+            android:id="@+id/status_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:layout_constraintTop_toBottomOf="@id/waktu_text"
+            card_view:layout_constraintStart_toStartOf="parent"
+            android:text="Status:"
             android:layout_marginTop="14dp"/>
 
         <TextView
@@ -59,7 +106,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/waktu_text"
-            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/status_title"
+            android:layout_marginStart="6dp"
             android:text="Terisi"
             android:layout_marginTop="14dp"/>
 

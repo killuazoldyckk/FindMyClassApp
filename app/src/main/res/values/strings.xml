@@ -71,6 +71,25 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    <string-array name="ruangan">
+        <item>Ruang 101</item>
+        <item>Ruang 102</item>
+        <item>Ruang 103</item>
+        <item>Ruang 104</item>
+        <item>Ruang 105</item>
+        <item>Ruang 106</item>
+    </string-array>
+    <string-array name="hari">
+        <item>Senin</item>
+        <item>Selasa</item>
+        <item>Rabu</item>
+        <item>Kamis</item>
+        <item>Jumat</item>
+    </string-array>
+    <string-array name="status">
+        <item>Terisi</item>
+        <item>Kosong</item>
+    </string-array>
     <string name="class_booked">Class Successfully Booked</string>
     <string name="ok">OK</string>
     <string name="no_notif1">No Notifications Yet</string>

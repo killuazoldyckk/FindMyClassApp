@@ -32,6 +32,8 @@ class ListClassAdapter(private val listRooms: ArrayList<Room>): RecyclerView.Ada
         holder.matkul.text = currentItem.matkul
         holder.hari.text = currentItem.hari
         holder.jam.text = currentItem.jam
+        holder.status.text = currentItem.status
+
     }
 
     interface OnItemClickListener {
@@ -40,10 +42,11 @@ class ListClassAdapter(private val listRooms: ArrayList<Room>): RecyclerView.Ada
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val namaRuang: TextView = itemView.findViewById(R.id.ruang_title)
+        val namaRuang: TextView = itemView.findViewById(R.id.ruang_text)
         val matkul: TextView = itemView.findViewById(R.id.matkul_text)
         val hari: TextView = itemView.findViewById(R.id.hari_text)
         val jam: TextView = itemView.findViewById(R.id.waktu_text)
+        val status: TextView = itemView.findViewById(R.id.status_text)
         private val bookingBtn: Button = itemView.findViewById(R.id.booking_btn)
 
         init {

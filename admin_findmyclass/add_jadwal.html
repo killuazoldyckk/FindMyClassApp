@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Schedule Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         *{
             margin: 0;
@@ -18,12 +19,13 @@
             height: 100vh;
         }
 
-        .btn btn-primary{
-            display : block;
-        }
-
         .classData{
             height: 100vh;
+        }
+
+        .sched_collection{
+            height: 100vh;
+            overflow-y: scroll;
         }
 
         .sched_collection h2{
@@ -37,6 +39,8 @@
         .sched_collection button:hover{
             background-color: #ffc107;
         }
+
+
     </style>
 </head>
 <body>
@@ -44,13 +48,13 @@
         <div class="col-md-6">
             <form id="jadwalForm"class="formJadwal row p-4">
                 <h2 class="text-center mb-3 text-primary">Daftar Jadwal Ruangan</h2>
-                <div class="col-md-6">
+                <div class="col-md-6" >
                     <label for="namaRuang" class="form-label ">Kode Kelas:</label>
-                    <input type="text" name="namaRuang" id="namaRuang" class="form-control" required>
+                    <input type="number" name="namaRuang" id="namaRuang" class="form-control" placeholder="101" required>
                 </div>
                 <div class="col-md-6">
                     <label for="hari" class=" form-label">Hari:</label>
-                    <select id="hari" name="hari" class="form-control" required>
+                    <select id="hari" name="hari" class="form-select" required>
                         <option value="Senin">Senin</option>
                         <option value="Selasa">Selasa</option>
                         <option value="Rabu">Rabu</option>
@@ -59,20 +63,20 @@
                     </select>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12" >
                     <label for="matkul" class="form-label">Mata Kuliah:</label>
-                    <input type="text" name="matkul" id="matkul" class="form-control" placeholder="Software Engineering" required>
+                    <input type="text" name="matkul" id="matkul" class="form-control" placeholder="Cloud Computing" required>
                 </div>                
 
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label for="waktu" class="form-label">Waktu :</label>
                     <br>
-                    <div class="btn-group">
-                        <button class="btn btn-light dropdown-toggle" type="button"     data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="btn-group w-100" >
+                        <button class="btn btn-light dropdown-toggle text-start" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                             Pilih Waktu
-                        <span class="visually-hidden">Toggle Dropdown</span>
+                            <span class="visually-hidden text-end">Toggle Dropdown</span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu w-100">
                             <li>
                                 <div class="form-check">
                                     <input type="checkbox" id="waktu_1" name="waktu[]" value="08.00 - 08.50">
@@ -140,7 +144,7 @@
 
                 <div class="col-md-3">
                     <label for="kom" class=" form-label">Kom:</label>
-                    <select id="kom" name="kom" class="form-control" required>
+                    <select id="kom" name="kom" class="form-select" required>
                         <option value="A">A</option>
                         <option value="B">B</option>
                         <option value="C">C</option>
@@ -148,7 +152,7 @@
                 </div>
                 <div class="col-md-3">
                     <label for="stambuk" class=" form-label">Stambuk:</label>
-                    <input type="text" name="stambuk" id="stambuk" class="form-control" placeholder="2021" required>
+                    <input type="text" name="stambuk" id="stambuk" class="form-select" placeholder="2021" required>
                 </div>
 
                 
@@ -160,31 +164,144 @@
             <div id="classroomData" class="classData bg-primary">
                 <div class="sched_collection p-4">
                     <h2 class="text-center mb-3">Schedule Registred</h2>
-                    <div class="btn-group">
+                    <!-- <div class="btn-group">
                         <button type="button" class="btn dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                             Urutkan berdasarkan
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Hari</a></li>
-                            <li><a class="dropdown-item" href="#">Kelas</a></li>
+                            <li><a class="dropdown-item" href="#" id="sortByHari">Hari</a></li>
+                            <li><a class="dropdown-item" href="#" id="sortByKelas">Kelas</a></li>
                         </ul>
-                    </div>
+                    </div> -->
                     <div id="scheduleContainer" class="overflow-auto mt-3">
                         <!-- Schedule data will be dynamically added here -->
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Add this modal structure to your HTML -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Schedule</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Editable fields -->
+                        <label for="editNamaRuang" class="form-label">Kode Kelas:</label>
+                        <input type="number" id="editNamaRuang" class="form-control" required>
+
+                        <label for="editHari" class="form-label">Hari:</label>
+                        <select id="editHari" name="hari" class="form-select" required>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                        </select>
+
+                        <label for="editMatkul" class="form-label">Mata Kuliah:</label>
+                        <input type="text" id="editMatkul" class="form-control" required>
+
+                        <label for="editWaktu" class="form-label">Waktu :</label>
+                        <div class="btn-group w-100" >
+                            <button class="btn btn-light dropdown-toggle text-start" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                                Pilih Waktu
+                                <span class="visually-hidden text-end">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu w-100">
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_1" name="waktu[]" value="08.00 - 08.50">
+                                        <label for="waktu_1" class="form-label">08.00 - 08.50</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_2" name="waktu[]" value="08.50 - 09.40">
+                                        <label for="waktu_2" class="form-label">08.50 - 09.40</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_3" name="waktu[]" value="09.40 - 10.30">
+                                        <label for="waktu_3" class="form-label">09.40 - 10.30</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_4" name="waktu[]" value="10.30 - 11.20">
+                                        <label for="waktu_4" class="form-label">10.30 - 11.20</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_5" name="waktu[]" value="11.20 - 12.10">
+                                        <label for="waktu_5" class="form-label">11.20 - 12.10</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_6" name="waktu[]" value="12.10 - 13.00">
+                                        <label for="waktu_6" class="form-label">12.10 - 13.00</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_7" name="waktu[]" value="13.00 - 13.50">
+                                        <label for="waktu_7" class="form-label">13.00 - 13.50</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_8" name="waktu[]" value="13.50 - 14.40">
+                                        <label for="waktu_8" class="form-label">13.50 - 14.40</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_9" name="waktu[]" value="14.40 - 15.30">
+                                        <label for="waktu_9" class="form-label">14.40 - 15.30</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="waktu_10" name="waktu[]" value="15.30 - 16.20">
+                                        <label for="waktu_10" class="form-label">15.30 - 16.20</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col">
+                            <label for="editKom" class=" form-label">Kom:</label>
+                            <select id="editKom" name="editKom" class="form-select" required>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="editStambuk" class=" form-label">Stambuk:</label>
+                            <input type="text" name="stambuk" id="editStambuk" class="form-control" placeholder="2021" required>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="updateBtn" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        import { getDatabase, ref, push, onValue,remove, set} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyAGQ6CUM9ik5KcYeMe3zROC2tC0G06i75Y",
             authDomain: "findmyclassjava.firebaseapp.com",
@@ -262,7 +379,130 @@
             return startTime + " - " + endTime;
         }
 
+        const scheduleContainer = document.getElementById('scheduleContainer');
+        const classroomRef = ref(database, 'classroom');
+
+        // Function to delete a schedule
+        window.deleteSchedule = function (key, namaRuang, hari, matkul, jam, kom, stambuk) {
+            // Display a confirmation dialog
+            const isConfirmed = window.confirm("Are you sure you want to delete this schedule?");
+
+            if (isConfirmed) {
+                // Construct the criteriaToDelete object
+                const criteriaToDelete = {
+                    namaRuang: namaRuang,
+                    hari: hari,
+                    matkul: matkul,
+                    jam: jam,
+                    kom: kom,
+                    stambuk: stambuk
+                };
+
+                // Create a reference to the specific data using the key
+                const dataRefToDelete = ref(database, `classroom/${key}`);
+
+                // Remove the data from the database
+                remove(dataRefToDelete)
+                    .then(() => {
+                        console.log("Data deleted successfully!");
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting data:", error);
+                    });
+            } else {
+                console.log("Deletion canceled.");
+            }
+        }
+
+        // Function to render schedule data
+        function renderSchedule(snapshot) {
+            const scheduleData = snapshot.val();
+            scheduleContainer.innerHTML = ''; // Clear previous content
+
+            for (const key in scheduleData) {
+                const schedule = scheduleData[key];
+                let kom = schedule.kom;
+                let stambuk = schedule.stambuk;
+                const scheduleHTML = `
+                    <div class="mb-3 p-3" style="background-color: #f8e505; border-radius: 1rem;">
+                        <h4>${schedule.namaRuang}</h4>
+                        <p>${schedule.matkul}</p>
+                        <p>Kom ${schedule.kom} ${schedule.stambuk}</p>
+                        <p>${schedule.jam}</p>
+                        <div class="m-2 text-end">
+                            <i class="editIcon fa-solid fa-pen-to-square fa-lg" style="color: #497eda;cursor: pointer;" onclick="openEditModal('${key}', '${schedule.namaRuang}', '${schedule.hari}', '${schedule.matkul}', '${schedule.jam}', '${schedule.kom}', '${schedule.stambuk}')"></i>
+                            <i class="deleteIcon fa-solid fa-trash fa-lg" style="color: red;cursor: pointer;" data-key="${key}" onclick="deleteSchedule('${key}', '${schedule.namaRuang}', '${schedule.hari}', '${schedule.matkul}', '${schedule.jam}', '${schedule.kom}', '${schedule.stambuk}')"></i>
+                        </div>
+                    </div>
+                `;
+                scheduleContainer.innerHTML += scheduleHTML;
+            }
+        }
+
+        // Function to open the modal with data for editing
+        window.openEditModal = function (key, namaRuang, hari, matkul, jam, kom, stambuk) {
+
+            // Populate the modal with existing data
+            document.getElementById("editNamaRuang").value = namaRuang;
+            document.getElementById("editHari").value = hari;
+            document.getElementById("editMatkul").value = matkul;
+            document.getElementById("editKom").value = kom;
+            document.getElementById("editStambuk").value = stambuk;
+
+            // Show the modal
+            $('#editModal').modal('show');
+
+            // Define a function to handle the update when the "Save" button is clicked
+            document.getElementById("updateBtn").onclick = function () {
+                // Retrieve updated data from the modal
+                var updatedNamaRuang = document.getElementById("editNamaRuang").value;
+                var updatedHari = document.getElementById("editHari").value;
+                var updatedMatkul = document.getElementById("editMatkul").value;
+                var updatedKom = document.getElementById("editKom").value;
+                var updatedStambuk = document.getElementById("editStambuk").value;
+
+                 // Get selected time slots
+                var selectedTimeSlots = [];
+                var checkboxes = document.getElementsByName("waktu[]");
+                checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    selectedTimeSlots.push(checkbox.value);
+                }
+                });
+
+                var updatedJam = mergeTimeSlots(selectedTimeSlots);
+
+                // Construct the updated data object
+                var updatedData = {
+                    namaRuang: updatedNamaRuang,
+                    hari: updatedHari,
+                    matkul: updatedMatkul,
+                    kom: updatedKom,
+                    stambuk: updatedStambuk,
+                    jam: updatedJam
+                };
+
+                // Create a reference to the specific data using the key
+                const dataRefToUpdate = ref(database, `classroom/${key}`);
+
+                // Update the data in the database
+                set(dataRefToUpdate, updatedData)
+                    .then(() => {
+                        console.log("Data updated successfully!");
+                        // Hide the modal after updating
+                        $('#editModal').modal('hide');
+                    })
+                    .catch((error) => {
+                        console.error("Error updating data:", error);
+                    });
+            };
+        }
+
+        // Listen for changes in the database and update the schedule
+        onValue(classroomRef, renderSchedule);
+
     </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 </body>

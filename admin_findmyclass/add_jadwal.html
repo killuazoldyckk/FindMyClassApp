@@ -214,61 +214,61 @@
                             <ul class="dropdown-menu w-100">
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_1" name="waktu[]" value="08.00 - 08.50">
+                                        <input type="checkbox" id="waktu_1" name="updateWaktu[]" value="08.00 - 08.50">
                                         <label for="waktu_1" class="form-label">08.00 - 08.50</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_2" name="waktu[]" value="08.50 - 09.40">
+                                        <input type="checkbox" id="waktu_2" name="updateWaktu[]" value="08.50 - 09.40">
                                         <label for="waktu_2" class="form-label">08.50 - 09.40</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_3" name="waktu[]" value="09.40 - 10.30">
+                                        <input type="checkbox" id="waktu_3" name="updateWaktu[]" value="09.40 - 10.30">
                                         <label for="waktu_3" class="form-label">09.40 - 10.30</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_4" name="waktu[]" value="10.30 - 11.20">
+                                        <input type="checkbox" id="waktu_4" name="updateWaktu[]" value="10.30 - 11.20">
                                         <label for="waktu_4" class="form-label">10.30 - 11.20</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_5" name="waktu[]" value="11.20 - 12.10">
+                                        <input type="checkbox" id="waktu_5" name="updateWaktu[]" value="11.20 - 12.10">
                                         <label for="waktu_5" class="form-label">11.20 - 12.10</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_6" name="waktu[]" value="12.10 - 13.00">
+                                        <input type="checkbox" id="waktu_6" name="updateWaktu[]" value="12.10 - 13.00">
                                         <label for="waktu_6" class="form-label">12.10 - 13.00</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_7" name="waktu[]" value="13.00 - 13.50">
+                                        <input type="checkbox" id="waktu_7" name="updateWaktu[]" value="13.00 - 13.50">
                                         <label for="waktu_7" class="form-label">13.00 - 13.50</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_8" name="waktu[]" value="13.50 - 14.40">
+                                        <input type="checkbox" id="waktu_8" name="updateWaktu[]" value="13.50 - 14.40">
                                         <label for="waktu_8" class="form-label">13.50 - 14.40</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_9" name="waktu[]" value="14.40 - 15.30">
+                                        <input type="checkbox" id="waktu_9" name="updateWaktu[]" value="14.40 - 15.30">
                                         <label for="waktu_9" class="form-label">14.40 - 15.30</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" id="waktu_10" name="waktu[]" value="15.30 - 16.20">
+                                        <input type="checkbox" id="waktu_10" name="updateWaktu[]" value="15.30 - 16.20">
                                         <label for="waktu_10" class="form-label">15.30 - 16.20</label>
                                     </div>
                                 </li>
@@ -461,16 +461,15 @@
                 var updatedKom = document.getElementById("editKom").value;
                 var updatedStambuk = document.getElementById("editStambuk").value;
 
-                 // Get selected time slots
-                var selectedTimeSlots = [];
-                var checkboxes = document.getElementsByName("waktu[]");
-                checkboxes.forEach(function(checkbox) {
-                if (checkbox.checked) {
-                    selectedTimeSlots.push(checkbox.value);
-                }
+                var selectedUpdateTimeSlots = [];                
+                var updatedCheckboxes = document.getElementsByName("updateWaktu[]");
+                updatedCheckboxes.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        selectedUpdateTimeSlots.push(checkbox.value);
+                    }
                 });
-
-                var updatedJam = mergeTimeSlots(selectedTimeSlots);
+    
+                var updatedJam = mergeTimeSlots(selectedUpdateTimeSlots);
 
                 // Construct the updated data object
                 var updatedData = {

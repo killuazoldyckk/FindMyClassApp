@@ -18,32 +18,32 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        val firebaseAuth = FirebaseAuth.getInstance();
 
         binding.loginBtn.setOnClickListener {
+
             val nim = binding.editTextNIM.text.toString()
             val password = binding.editTextPassword.text.toString()
 
             val email = "$nim@example.com"
-
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) {
-                        if (it.isSuccessful) {
-                            val goToDashboard = Intent(this, DashboardActivity::class.java)
-                            startActivity(goToDashboard)
-                        } else {
-                            // Login gagal, tampilkan pesan kesalahan
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Akun tidak ditemukan",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) {
+                    if (it.isSuccessful) {
+                        val goToDashboard = Intent(this, DashboardActivity::class.java)
+                        startActivity(goToDashboard)
+                    } else {
+                        // Login gagal, tampilkan pesan kesalahan
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Akun tidak ditemukan",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-            } else {
-                Toast.makeText(this, "Semua fields harus diisi!", Toast.LENGTH_SHORT).show()
-            }
+                }
+        } else {
+            Toast.makeText(this, "Semua fields harus diisi!", Toast.LENGTH_SHORT).show()
+        }
         }
 
 

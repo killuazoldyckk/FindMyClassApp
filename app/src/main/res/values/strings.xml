@@ -107,4 +107,7 @@
     <string name="selasa">Hari Selasa</string>
     <string name="jadwal">Pukul 13.00 - 15.30</string>
     <string name="cancel">Cancel Class</string>
+    <string name="pilih_ruangan">Pilih Ruangan</string>
+    <string name="pilih_hari">Pilih Hari</string>
+    <string name="pilih_mata_kuliah">Pilih Mata Kuliah</string>
 </resources>

@@ -75,6 +75,7 @@
                 android:padding="5dp"
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry"
+                android:inputType="textPassword"
                 android:textSize="15sp"
                 android:fontFamily="@font/poppins_regular"
                 android:textColorHint="@color/lightblue"

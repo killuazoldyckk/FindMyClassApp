@@ -2,10 +2,188 @@ package com.cc.findmyclasskotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import com.cc.findmyclasskotlin.databinding.ActivityAddNewClassBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class AddNewClassActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddNewClassBinding
+    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth
+    private var selectedMatkul: String? = null
+    private lateinit var matkulAdapter: ArrayAdapter<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_new_class)
+        binding = ActivityAddNewClassBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        database = FirebaseDatabase.getInstance().getReference("classroom")
+
+        // Initialize the adapter as a property of the class
+        matkulAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, mutableListOf())
+
+        // Initialize the spinner
+        val ruangSpinner = binding.dropdownRuang
+
+        // Initialize the serachView
+        val matkulSearch = binding.searchViewMatkul
+        val autoCompleteTextView = matkulSearch.findViewById<AutoCompleteTextView>(R.id.search_src_text)
+
+        // Use ViewTreeObserver to wait until the SearchView is measured
+        matkulSearch.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                // Remove the listener to avoid multiple calls
+                matkulSearch.viewTreeObserver.removeOnPreDrawListener(this)
+
+                // Get the width of the SearchView
+                val searchViewWidth = matkulSearch.width
+
+                // Set the width of the AutoCompleteTextView to match the SearchView
+                autoCompleteTextView.width = searchViewWidth
+
+                return true
+            }
+        })
+
+        autoCompleteTextView.setOnItemClickListener { adapterView: AdapterView<*>, view: View?, position: Int, id: Long ->
+            // Handle item selection here, for example:
+            val adapter = adapterView.adapter
+            if (adapter is ArrayAdapter<*>) {
+                selectedMatkul = adapter.getItem(position) as? String
+                // Do something with the selectedMatkul
+            }
+        }
+
+        // Set a query listener for handling user input in SearchView
+        matkulSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle the submitted query if needed
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Handle the text change in the SearchView
+                matkulAdapter.filter.filter(newText)
+                return true
+            }
+        })
+
+        // Fetch unique "matkul" values from the database
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val matkulSet = HashSet<String>()
+
+                for (classSnapshot in snapshot.children) {
+                    val matkul = classSnapshot.child("matkul").getValue(String::class.java)
+                    if (matkul != null) {
+                        matkulSet.add(matkul)
+                    }
+                }
+
+                // Update the adapter data
+                matkulAdapter.clear()
+                matkulAdapter.addAll(matkulSet.toList())
+
+                // Notify the adapter that the data set has changed
+                matkulAdapter.notifyDataSetChanged()
+
+                // Set the adapter to the AutoCompleteTextView
+                autoCompleteTextView.setAdapter(matkulAdapter)
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle the error if needed
+                Toast.makeText(applicationContext, "Failed to retrieve data", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // Read data from Firebase Realtime Database
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                val ruangSet = HashSet<String>()
+
+                for (classSnapshot in snapshot.children) {
+                    val namaRuang = classSnapshot.child("namaRuang").getValue(String::class.java)
+                    if (namaRuang != null) {
+                        ruangSet.add(namaRuang)
+                    }
+                }
+
+                // Convert HashSet to Array
+                val ruangArray = ruangSet.toTypedArray()
+
+                // Populate the spinner with dynamic array
+                val ruangAdapter = ArrayAdapter(
+                    this@AddNewClassActivity,
+                    android.R.layout.simple_spinner_item,
+                    ruangArray
+                )
+                ruangAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                ruangSpinner.adapter = ruangAdapter
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle the error
+                Toast.makeText(
+                    applicationContext,
+                    "Failed to retrieve data: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
+        binding.bookingBtn.setOnClickListener {
+            // Get user inputs
+            val ruang = binding.dropdownRuang.selectedItem.toString()
+            val hari = binding.dropdownHari.selectedItem.toString()
+            val waktu = binding.editTextWaktu.text.toString()
+
+            // Check if a matkul is selected
+            if (selectedMatkul.isNullOrEmpty()) {
+                // Show an error message or handle the case where matkul is not selected
+                Toast.makeText(applicationContext, "Please select a matkul", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Create a Room object
+            val room = Room(
+                namaRuang = ruang,
+                matkul = selectedMatkul,
+                hari = hari,
+                jam = waktu,
+                status = "Terisi",
+                stambuk = "2021", // You can set the value as needed
+                kom = "B" // You can set the value as needed
+            )
+
+            // Push the data to the Realtime Database
+            val newClassRef = database.push()
+            newClassRef.setValue(room, object : DatabaseReference.CompletionListener {
+                override fun onComplete(error: DatabaseError?, ref: DatabaseReference) {
+                    if (error == null) {
+                        // Data was successfully written
+                        finish()
+                    } else {
+                        // Handle the error
+                        val errorMessage = "Failed to save data: ${error.message}"
+                        Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        }
+
     }
 }

@@ -49,6 +49,11 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
         val adapter = ListClassAdapter(roomArrayList)
         adapter.setOnItemClickListener(this)
         classRecyclerView.adapter = adapter
+
+        binding.addJadwal.setOnClickListener{
+            val goToAddNewClassActivity = Intent(this,AddNewClassActivity::class.java)
+            startActivity(goToAddNewClassActivity)
+        }
     }
 
     override fun onItemClick(position: Int) {

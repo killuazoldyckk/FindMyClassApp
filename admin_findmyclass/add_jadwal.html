@@ -300,7 +300,7 @@
         
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue,remove, set} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, onValue,remove, set, query, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyAGQ6CUM9ik5KcYeMe3zROC2tC0G06i75Y",
@@ -319,11 +319,10 @@
 
         const jadwalForm = document.getElementById('jadwalForm');
         const classroomDataDiv = document.getElementById('classroomData');
-
-        jadwalForm.addEventListener('submit',(e) => {
-
+        
+        jadwalForm.addEventListener('submit', (e) => {
             e.preventDefault(); // Prevent form submission
-            
+        
             // Get form data
             var namaRuang = document.getElementById("namaRuang").value;
             var hari = document.getElementById("hari").value;
@@ -331,52 +330,109 @@
             var kom = document.getElementById("kom").value;
             var stambuk = document.getElementById("stambuk").value;
             var status = "Terisi";
-
+        
             // Get selected time slots
             var selectedTimeSlots = [];
             var checkboxes = document.getElementsByName("waktu[]");
-            checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                selectedTimeSlots.push(checkbox.value);
-            }
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedTimeSlots.push(checkbox.value);
+                }
             });
-
-            var jam = mergeTimeSlots(selectedTimeSlots);
-
-            // Create JSON object
-            var formData = {
-                namaRuang: namaRuang,
-                hari: hari,
-                matkul: matkul,
-                jam: jam,
-                status: status,
-                kom: kom,
-                stambuk: stambuk
-            };
-            
-            // Push data to the database
-            push(ref(database, 'classroom'), formData)
-            .then(() => {
-                console.log("Data sent to Firebase!");
-                document.getElementById("jadwalForm").reset();
-            })
-            .catch((error) => {
-                console.error("Error sending data to Firebase: ", error);
+        
+            var jam = selectedTimeSlots.join(', ');
+        
+            // Reference to your Firebase Realtime Database
+            var databaseRef = ref(database, 'classroom');
+        
+            // Query to check if data with the same namaRuang and hari exists
+            const matchingNamaRuangQuery = query(
+                databaseRef,
+                orderByChild('namaRuang'),
+                equalTo(namaRuang)
+            );
+        
+            // Retrieve data based on the query
+            get(matchingNamaRuangQuery)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        // Data with the same namaRuang exists, check for matching hari and jam
+                        const matchingData = snapshot.val();
+                        const isDataAlreadyExists = Object.values(matchingData).some(data => data.hari === hari && data.jam === jam);
+        
+                        if (isDataAlreadyExists) {
+                            const message = `Jadwal pada ruangan "${namaRuang}" pada hari "${hari}" dan waktu tersebut telah terisi. Mohon pilih jadwal lain.`;
+                            alert(message);
+                        } else {
+                            // Data with the same namaRuang exists, but hari and jam are different. Proceed with form submission
+                            // Create JSON object
+                            var formData = {
+                                namaRuang: namaRuang,
+                                hari: hari,
+                                matkul: matkul,
+                                jam: jam,
+                                status: status,
+                                kom: kom,
+                                stambuk: stambuk
+                            };
+        
+                            // Push data to the database
+                            push(databaseRef, formData)
+                                .then(() => {
+                                    const savemessage = `Jadwal Berhasil Ditambahkan`;
+                                    alert(savemessage);
+                                    console.log("Data sent to Firebase Realtime Database!");
+                                    document.getElementById("jadwalForm").reset();
+                                })
+                                .catch((error) => {
+                                    console.error("Error sending data to Firebase Realtime Database: ", error);
+                                });
+                        }
+                    } else {
+                        // No data with the same namaRuang. Proceed with form submission
+                        // Create JSON object
+                        var formData = {
+                            namaRuang: namaRuang,
+                            hari: hari,
+                            matkul: matkul,
+                            jam: jam,
+                            status: status,
+                            kom: kom,
+                            stambuk: stambuk
+                        };
+        
+                        // Push data to the database
+                        push(databaseRef, formData)
+                            .then(() => {
+                                console.log("Data sent to Firebase Realtime Database!");
+                                document.getElementById("jadwalForm").reset();
+                            })
+                            .catch((error) => {
+                                console.error("Error sending data to Firebase Realtime Database: ", error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error querying data from Firebase Realtime Database: ", error);
+                });
             });
-
-        })
-
-        function mergeTimeSlots(timeSlots) {
-            if (timeSlots.length === 0) {
-                return "";
-            }
-
-            timeSlots.sort();
-
-            var startTime = timeSlots[0].split(" - ")[0];
-            var endTime = timeSlots[timeSlots.length - 1].split(" - ")[1];
-
-            return startTime + " - " + endTime;
+        function mergeTime(jam) {
+            // Split the string into individual time ranges
+            const individualRanges = jam.split(", ");
+        
+            // Extract start and end times from each range
+            const startTimes = individualRanges.map(range => parseFloat(range.split(" - ")[0]));
+            const endTimes = individualRanges.map(range => parseFloat(range.split(" - ")[1]));
+        
+            // Find the minimum start time and maximum end time
+            const minStartTime = Math.min(...startTimes);
+            const maxEndTime = Math.max(...endTimes);
+        
+            // Combine the min and max times to create the new range
+            const combinedRange = `${minStartTime.toFixed(2)} - ${maxEndTime.toFixed(2)}`;
+        
+            // Return the result
+            return combinedRange;
         }
 
         const scheduleContainer = document.getElementById('scheduleContainer');
@@ -421,14 +477,16 @@
 
             for (const key in scheduleData) {
                 const schedule = scheduleData[key];
-                let kom = schedule.kom;
-                let stambuk = schedule.stambuk;
+                let jam = schedule.jam;
+                
+                const mergeJam = mergeTime(schedule.jam);
+
                 const scheduleHTML = `
                     <div class="mb-3 p-3" style="background-color: #f8e505; border-radius: 1rem;">
                         <h4>${schedule.namaRuang}</h4>
                         <p>${schedule.matkul}</p>
                         <p>Kom ${schedule.kom} ${schedule.stambuk}</p>
-                        <p>${schedule.jam}</p>
+                        <p>${schedule.hari}, ${mergeJam}</p>
                         <div class="m-2 text-end">
                             <i class="editIcon fa-solid fa-pen-to-square fa-lg" style="color: #497eda;cursor: pointer;" onclick="openEditModal('${key}', '${schedule.namaRuang}', '${schedule.hari}', '${schedule.matkul}', '${schedule.jam}', '${schedule.kom}', '${schedule.stambuk}')"></i>
                             <i class="deleteIcon fa-solid fa-trash fa-lg" style="color: red;cursor: pointer;" data-key="${key}" onclick="deleteSchedule('${key}', '${schedule.namaRuang}', '${schedule.hari}', '${schedule.matkul}', '${schedule.jam}', '${schedule.kom}', '${schedule.stambuk}')"></i>
@@ -449,6 +507,28 @@
             document.getElementById("editKom").value = kom;
             document.getElementById("editStambuk").value = stambuk;
 
+            // Uncheck all checkboxes first
+            var allCheckboxes = document.getElementsByName("updateWaktu[]");
+            allCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+            var timeSlots = jam.split(",");
+            console.log(timeSlots);
+
+            timeSlots.forEach(function (timeSlot) {
+                // Trim any leading or trailing spaces
+                timeSlot = timeSlot.trim();
+            
+                // Find the checkbox with the corresponding value
+                var checkbox = document.querySelector('input[name="updateWaktu[]"][value="' + timeSlot + '"]');
+                
+                if (checkbox) {
+                    checkbox.checked = true;
+                } else {
+                    console.log("Checkbox not found for time slot:", timeSlot);  // Add this line for debugging
+                }
+            });
+
             // Show the modal
             $('#editModal').modal('show');
 
@@ -460,42 +540,100 @@
                 var updatedMatkul = document.getElementById("editMatkul").value;
                 var updatedKom = document.getElementById("editKom").value;
                 var updatedStambuk = document.getElementById("editStambuk").value;
-
-                var selectedUpdateTimeSlots = [];                
+            
+                var selectedUpdateTimeSlots = [];
                 var updatedCheckboxes = document.getElementsByName("updateWaktu[]");
                 updatedCheckboxes.forEach(function(checkbox) {
                     if (checkbox.checked) {
                         selectedUpdateTimeSlots.push(checkbox.value);
                     }
                 });
-    
-                var updatedJam = mergeTimeSlots(selectedUpdateTimeSlots);
 
-                // Construct the updated data object
-                var updatedData = {
-                    namaRuang: updatedNamaRuang,
-                    hari: updatedHari,
-                    matkul: updatedMatkul,
-                    kom: updatedKom,
-                    stambuk: updatedStambuk,
-                    jam: updatedJam
-                };
+                console.log("updatedNamaRuang:", updatedNamaRuang);
+                console.log("updatedHari:", updatedHari);
+            
+                var updatedJam = selectedUpdateTimeSlots.join(', ');
+                console.log("updatedJam:", updatedJam);
 
                 // Create a reference to the specific data using the key
-                const dataRefToUpdate = ref(database, `classroom/${key}`);
+                const dataRef = ref(database, 'classroom');
+            
+                // Query to check if data with the same namaRuang and hari exists
+                const cekData = query(
+                    dataRef,
+                    orderByChild('namaRuang'),
+                    equalTo(updatedNamaRuang)
+                );
+            
+                // Retrieve existing data for the key
+                get(cekData)
+                    .then((snapshot) => {
+                        console.log("Snapshot:", snapshot.val());
+                        if (snapshot.exists()) {
+                            // Data with the same namaRuang exists, check for matching hari and jam
+                            const matchingData = snapshot.val();
+                            const isConflict = Object.values(matchingData).some(data => data.hari === updatedHari && data.jam === updatedJam);
+            
+                            if (isConflict) {
+                                const updaterejectmessage = `Jadwal pada ruangan "${updatedNamaRuang}" pada hari "${updatedHari}" dan waktu tersebut telah terisi. Mohon pilih jadwal lain.`;
+                                alert(updaterejectmessage);
+                            } else {
+                                // No conflict, proceed with the update
+                                const updatedData = {
+                                    namaRuang: updatedNamaRuang,
+                                    hari: updatedHari,
+                                    matkul: updatedMatkul,
+                                    kom: updatedKom,
+                                    stambuk: updatedStambuk,
+                                    jam: updatedJam
+                                };
+            
+                                // Update the data in the database
+                                set(dataRefToUpdate, updatedData)
+                                    .then(() => {
+                                        console.log("Data updated successfully!");
+                                        const updateMessage = "Jadwal berhasil diperbarui";
+                                        alert(updateMessage);
+                                        $('#editModal').modal('hide');
+                                    })
+                                    .catch((error) => {
+                                        console.error("Error updating data:", error);
+                                    });
+                            }
+                        } else {
+                            // Data does not exist, proceed with the update
+                            // Construct the updated data object
+                            var updatedData = {
+                                namaRuang: updatedNamaRuang,
+                                hari: updatedHari,
+                                matkul: updatedMatkul,
+                                kom: updatedKom,
+                                stambuk: updatedStambuk,
+                                jam: updatedJam
+                            };
 
-                // Update the data in the database
-                set(dataRefToUpdate, updatedData)
-                    .then(() => {
-                        console.log("Data updated successfully!");
-                        // Hide the modal after updating
-                        $('#editModal').modal('hide');
+                            const dataRefToUpdate = ref(database, `classroom/${key}`);
+            
+                            // Update the data in the database
+                            set(dataRefToUpdate, updatedData)
+                                .then(() => {
+                                    console.log("Data updated successfully!");
+                                    const updatemessage = "Jadwal berhasil diperbarui";
+                                    alert(updatemessage);
+                                    $('#editModal').modal('hide');
+                                })
+                                .catch((error) => {
+                                    console.error("Error updating data:", error);
+                                });
+                        }
                     })
                     .catch((error) => {
-                        console.error("Error updating data:", error);
+                        console.error("Error querying data from Firebase Realtime Database: ", error);
                     });
             };
-        }
+            
+    };
+        
 
         // Listen for changes in the database and update the schedule
         onValue(classroomRef, renderSchedule);

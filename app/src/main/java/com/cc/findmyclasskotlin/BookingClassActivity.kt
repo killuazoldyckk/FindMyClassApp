@@ -50,7 +50,9 @@ class BookingClassActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
                         val room = snapshot.getValue(Room::class.java)
-                        if ((room != null) && (room.namaRuang == namaRuang) && (room.hari == hari) && (room.jam == jam)) {
+                        val roomKey = snapshot.key
+                        if ((room != null) && (roomKey != null)) {
+
                             // Update data in Firebase
                             val updateData: MutableMap<String, Any> = HashMap()
                             updateData["namaRuang"] = namaRuang

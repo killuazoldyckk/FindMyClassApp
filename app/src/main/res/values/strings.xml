@@ -72,12 +72,12 @@
         <item>3</item>
     </string-array>
     <string-array name="ruangan">
-        <item>Ruang 101</item>
-        <item>Ruang 102</item>
-        <item>Ruang 103</item>
-        <item>Ruang 104</item>
-        <item>Ruang 105</item>
-        <item>Ruang 106</item>
+        <item>101</item>
+        <item>102</item>
+        <item>103</item>
+        <item>104</item>
+        <item>105</item>
+        <item>106</item>
     </string-array>
     <string-array name="hari">
         <item>Senin</item>

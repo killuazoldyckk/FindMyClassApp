@@ -1,9 +1,9 @@
 package com.cc.findmyclasskotlin
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cc.findmyclasskotlin.databinding.ActivityDashboardBinding
@@ -56,6 +56,7 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
         val selectedRoom = roomArrayList[position]
 
         intent.putExtra("SELECTED_ROOM", selectedRoom)
+        intent.putExtra("PRE_FILLED", true)
 
         startActivity(intent)
     }

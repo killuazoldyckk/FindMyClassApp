@@ -3,10 +3,14 @@ package com.cc.findmyclasskotlin
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.cc.findmyclasskotlin.databinding.ActivityAddNewClassBinding
@@ -19,6 +23,8 @@ class AddNewClassActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var selectedMatkul: String? = null
     private lateinit var matkulAdapter: ArrayAdapter<String>
+    private lateinit var dropdownPopup: PopupWindow
+    private val selectedTimeSlots = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,11 +151,17 @@ class AddNewClassActivity : AppCompatActivity() {
             }
         })
 
+        binding.dropdownButton.setOnClickListener {
+            // Show popup menu for selecting time slots
+            showWaktuDropdown()
+        }
+
         binding.bookingBtn.setOnClickListener {
             // Get user inputs
             val ruang = binding.dropdownRuang.selectedItem.toString()
             val hari = binding.dropdownHari.selectedItem.toString()
-            val waktu = binding.editTextWaktu.text.toString()
+            // Concatenate the selected time slots into a string
+            val jam = selectedTimeSlots.joinToString(", ")
 
             // Check if a matkul is selected
             if (selectedMatkul.isNullOrEmpty()) {
@@ -163,7 +175,7 @@ class AddNewClassActivity : AppCompatActivity() {
                 namaRuang = ruang,
                 matkul = selectedMatkul,
                 hari = hari,
-                jam = waktu,
+                jam = jam,
                 status = "Terisi",
                 stambuk = "2021", // You can set the value as needed
                 kom = "B" // You can set the value as needed
@@ -185,5 +197,44 @@ class AddNewClassActivity : AppCompatActivity() {
             })
         }
 
+    }
+
+    // Function to show the waktu dropdown
+    private fun showWaktuDropdown() {
+        val popupView = layoutInflater.inflate(R.layout.popup_waktu, null)
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val waktuOptions = resources.getStringArray(R.array.waktu_options)
+
+        val waktuCheckBoxGroup = popupView.findViewById<LinearLayout>(R.id.waktuCheckBoxGroup)
+
+        // Inflate the waktu checkbox options dynamically
+        for ((index, option) in waktuOptions.withIndex()) {
+            val checkBox = CheckBox(this)
+            checkBox.id = index
+            checkBox.text = option
+            waktuCheckBoxGroup.addView(checkBox)
+
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                // Handle the checkbox selection
+                if (isChecked) {
+                    selectedTimeSlots.add(option)
+                } else {
+                    selectedTimeSlots.remove(option)
+                }
+            }
+        }
+
+        // Set the onDismissListener to update selectedWaktu when the popup is dismissed
+        popupWindow.setOnDismissListener {
+            // Update selectedWaktu if needed
+        }
+
+        // Show the popup below the dropdownButton
+        popupWindow.showAsDropDown(binding.dropdownButton)
     }
 }

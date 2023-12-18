@@ -35,7 +35,6 @@ class BookingClassActivity : AppCompatActivity() {
             binding.editTextWaktu.setText(selectedRoom.jam ?: "")
             binding.dropdownStatus.setSelection(getIndex(binding.dropdownStatus, selectedRoom.status
                 ?: ""))
-
         }
 
         binding.bookingBtn.setOnClickListener {
@@ -45,33 +44,32 @@ class BookingClassActivity : AppCompatActivity() {
             val jam = binding.editTextWaktu.text.toString()
             val status = binding.dropdownStatus.selectedItem.toString()
 
-            // Dapatkan referensi database
-            val database = FirebaseDatabase.getInstance().getReference("classroom")
+            database = FirebaseDatabase.getInstance().getReference("classroom")
 
-            // Buat query berdasarkan hari dan jam
-            val query = database.orderByChild("hari").equalTo(hari).orderByChild("jam").equalTo(jam)
-
-            query.addListenerForSingleValueEvent(object : ValueEventListener {
+            database.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
-                        val uniqueId = snapshot.key
+                        val room = snapshot.getValue(Room::class.java)
+                        if ((room != null) && (room.namaRuang == namaRuang) && (room.hari == hari) && (room.jam == jam)) {
+                            // Update data in Firebase
+                            val updateData: MutableMap<String, Any> = HashMap()
+                            updateData["namaRuang"] = namaRuang
+                            updateData["matkul"] = matkul
+                            updateData["hari"] = hari
+                            updateData["jam"] = jam
+                            updateData["status"] = status
 
-                        uniqueId?.let {
-                            // Update data di Firebase
-                            database.child(it).child("namaRuang").setValue(namaRuang)
-                            database.child(it).child("matkul").setValue(matkul)
-                            database.child(it).child("hari").setValue(hari)
-                            database.child(it).child("jam").setValue(jam)
-                            database.child(it).child("status").setValue(status)
+                            snapshot.ref.updateChildren(updateData as Map<String, Any>)
+                            break
                         }
                     }
-                    // Setelah update, kembali ke DashboardActivity
+
                     val backToDashboard = Intent(this@BookingClassActivity, DashboardActivity::class.java)
                     startActivity(backToDashboard)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Tangani kesalahan jika diperlukan
+                    // Handle errors if needed
                 }
             })
         }
@@ -91,5 +89,4 @@ class BookingClassActivity : AppCompatActivity() {
         }
         return 0
     }
-
 }

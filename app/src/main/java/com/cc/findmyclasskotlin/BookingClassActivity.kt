@@ -23,6 +23,8 @@ class BookingClassActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private val selectedTimeSlots = mutableListOf<String>()
     private var popupWindow: PopupWindow? = null
+    private var displayedTime = ""
+    private var storedTime = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,8 @@ class BookingClassActivity : AppCompatActivity() {
                 binding.dropdownHari.setSelection(getIndex(binding.dropdownHari, selectedRoom.hari ?: ""))
             }
 
-            binding.textViewWaktu.text = selectedRoom.jam ?: ""
+            val formattedTime = selectedRoom.jam?.let { formatClassTime(it) }
+            binding.textViewWaktu.text = formattedTime ?: ""
 
             val statusAdapter = binding.dropdownStatus.adapter
             if (statusAdapter != null) {
@@ -127,7 +130,7 @@ class BookingClassActivity : AppCompatActivity() {
                         updateData["namaRuang"] = namaRuang
                         updateData["matkul"] = matkul
                         updateData["hari"] = hari
-                        updateData["jam"] = jam
+                        updateData["jam"] = storedTime
                         updateData["status"] = status
 
                         snapshot.ref.updateChildren(updateData)
@@ -191,11 +194,91 @@ class BookingClassActivity : AppCompatActivity() {
 
         // Set the onDismissListener to update selectedWaktu when the popup is dismissed
         popupWindow?.setOnDismissListener {
-            // Update selectedWaktu if needed
+            // Update the displayed time with the merged time slots
+            displayTime(selectedTimeSlots)
         }
 
         // Show the popup below the dropdownButton
         popupWindow?.showAsDropDown(binding.dropdownWaktu)
+    }
+
+    // Fungsi untuk menampilkan waktu yang diformat
+    private fun displayTime(timeSlots: List<String>) {
+        // Tampilkan waktu dalam format yang diinginkan pada antarmuka pengguna
+        displayedTime = getCombinedTime(timeSlots)
+        binding.textViewWaktu.text = displayedTime
+    }
+
+    // ...
+
+    private fun formatClassTime(rawTime: String): String {
+        val timeSlots = rawTime.split(",") // Memisahkan waktu yang terpisah oleh koma
+        val mergedSlots = mergeTimeSlots(timeSlots) // Menggabungkan waktu yang overlapping
+
+        if (mergedSlots.isEmpty()) return ""
+
+        val firstSlotParts = mergedSlots.first().split("-")
+        val lastSlotParts = mergedSlots.last().split("-")
+
+        val startTime = firstSlotParts.first()
+        val endTime = lastSlotParts.last()
+
+        return "$startTime - $endTime"
+    }
+
+// ...
+
+
+    // Function to combine time slots into the desired format
+    private fun getCombinedTime(timeSlots: List<String>): String {
+        val mergedSlots = mergeTimeSlots(timeSlots)
+        val combinedTime = StringBuilder()
+
+        if (mergedSlots.isEmpty()) return ""
+
+        val firstSlotParts = mergedSlots.first().split("-")
+        val lastSlotParts = mergedSlots.last().split("-")
+
+        val startTime = firstSlotParts.first()
+        val endTime = lastSlotParts.last()
+
+        combinedTime.append(startTime)
+        combinedTime.append(" - ")
+        combinedTime.append(endTime)
+
+        // Simpan waktu yang akan disimpan ke database tanpa spasi
+        storedTime = mergedSlots.joinToString(",")
+
+        return combinedTime.toString()
+    }
+
+
+    private fun mergeTimeSlots(timeSlots: List<String>): List<String> {
+        val mergedSlots = mutableListOf<String>()
+        if (timeSlots.isNotEmpty()) {
+            val sortedSlots = timeSlots.sorted()
+
+            var start = sortedSlots[0].substringBefore("-")
+            var end = sortedSlots[0].substringAfter("-")
+
+            for (i in 1 until sortedSlots.size) {
+                val nextStart = sortedSlots[i].substringBefore("-")
+                val nextEnd = sortedSlots[i].substringAfter("-")
+
+                if (nextStart <= end) {
+                    // Merge the time slots
+                    end = if (nextEnd > end) nextEnd else end
+                } else {
+                    // Add the merged time slot and update start and end
+                    mergedSlots.add("$start-$end")
+                    start = nextStart
+                    end = nextEnd
+                }
+            }
+            // Add the last merged time slot
+            mergedSlots.add("$start-$end")
+        }
+        return mergedSlots
     }
 
     private fun getIndex(spinner: Spinner, myString: String): Int {

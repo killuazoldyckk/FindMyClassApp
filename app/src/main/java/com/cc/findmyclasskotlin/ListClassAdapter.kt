@@ -30,10 +30,55 @@ class ListClassAdapter(private val listRooms: ArrayList<Room>): RecyclerView.Ada
 
         holder.namaRuang.text = currentItem.namaRuang
         holder.matkul.text = currentItem.matkul
-        holder.hari.text = currentItem.hari
-        holder.jam.text = currentItem.jam
+        // Mengubah format waktu sesuai keinginan
+        val formattedTime = currentItem.jam?.let { formatClassTime(it) }
+        holder.jam.text = formattedTime
         holder.status.text = currentItem.status
 
+    }
+
+    // Fungsi untuk mengubah format waktu yang diambil dari Firebase
+    private fun formatClassTime(rawTime: String): String {
+        val timeSlots = rawTime.split(",") // Memisahkan waktu yang terpisah oleh koma
+        val mergedSlots = mergeTimeSlots(timeSlots) // Menggabungkan waktu yang overlapping
+
+        if (mergedSlots.isEmpty()) return ""
+
+        val firstSlotParts = mergedSlots.first().split("-")
+        val lastSlotParts = mergedSlots.last().split("-")
+
+        val startTime = firstSlotParts.first()
+        val endTime = lastSlotParts.last()
+
+        return "$startTime - $endTime"
+    }
+
+    private fun mergeTimeSlots(timeSlots: List<String>): List<String> {
+        val mergedSlots = mutableListOf<String>()
+        if (timeSlots.isNotEmpty()) {
+            val sortedSlots = timeSlots.sorted()
+
+            var start = sortedSlots[0].substringBefore("-")
+            var end = sortedSlots[0].substringAfter("-")
+
+            for (i in 1 until sortedSlots.size) {
+                val nextStart = sortedSlots[i].substringBefore("-")
+                val nextEnd = sortedSlots[i].substringAfter("-")
+
+                if (nextStart <= end) {
+                    // Merge the time slots
+                    end = if (nextEnd > end) nextEnd else end
+                } else {
+                    // Add the merged time slot and update start and end
+                    mergedSlots.add("$start-$end")
+                    start = nextStart
+                    end = nextEnd
+                }
+            }
+            // Add the last merged time slot
+            mergedSlots.add("$start-$end")
+        }
+        return mergedSlots
     }
 
     interface OnItemClickListener {

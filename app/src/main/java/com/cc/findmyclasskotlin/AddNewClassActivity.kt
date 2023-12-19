@@ -32,6 +32,7 @@ class AddNewClassActivity : AppCompatActivity() {
     private lateinit var dropdownPopup: PopupWindow
     private val selectedTimeSlots = mutableListOf<String>()
     private var popupWindow: PopupWindow? = null
+    private var displayedTime = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -176,7 +177,7 @@ class AddNewClassActivity : AppCompatActivity() {
             val ruang = binding.dropdownRuang.selectedItem.toString()
             val hari = binding.dropdownHari.selectedItem.toString()
             // Concatenate the selected time slots into a string
-            val jam = selectedTimeSlots.joinToString(", ")
+            val jam = getCombinedTime(selectedTimeSlots)
 
             // Check if a matkul is selected
             if (selectedMatkul.isNullOrEmpty()) {
@@ -255,6 +256,55 @@ class AddNewClassActivity : AppCompatActivity() {
         }
     }
 
+    private fun getCombinedTime(timeSlots: List<String>): String {
+        val mergedSlots = mergeTimeSlots(timeSlots)
+        val combinedTime = StringBuilder()
+
+        if (mergedSlots.isEmpty()) return ""
+
+        val firstSlotParts = mergedSlots.first().split("-")
+        val lastSlotParts = mergedSlots.last().split("-")
+
+        val startTime = firstSlotParts.first()
+        val endTime = lastSlotParts.last()
+
+        combinedTime.append(startTime)
+        combinedTime.append(" - ")
+        combinedTime.append(endTime)
+
+        // Simpan waktu yang akan disimpan ke database tanpa spasi
+        return combinedTime.toString()
+    }
+
+    private fun mergeTimeSlots(timeSlots: List<String>): List<String> {
+        val mergedSlots = mutableListOf<String>()
+        if (timeSlots.isNotEmpty()) {
+            val sortedSlots = timeSlots.sorted()
+
+            var start = sortedSlots[0].substringBefore("-")
+            var end = sortedSlots[0].substringAfter("-")
+
+            for (i in 1 until sortedSlots.size) {
+                val nextStart = sortedSlots[i].substringBefore("-")
+                val nextEnd = sortedSlots[i].substringAfter("-")
+
+                if (nextStart <= end) {
+                    // Merge the time slots
+                    end = if (nextEnd > end) nextEnd else end
+                } else {
+                    // Add the merged time slot and update start and end
+                    mergedSlots.add("$start-$end")
+                    start = nextStart
+                    end = nextEnd
+                }
+            }
+            // Add the last merged time slot
+            mergedSlots.add("$start-$end")
+        }
+        return mergedSlots
+    }
+
+
     // Function to show the waktu dropdown
     private fun showWaktuDropdown() {
         val popupView = layoutInflater.inflate(R.layout.popup_waktu, null)
@@ -288,10 +338,18 @@ class AddNewClassActivity : AppCompatActivity() {
 
         // Set the onDismissListener to update selectedWaktu when the popup is dismissed
         popupWindow?.setOnDismissListener {
-            // Update selectedWaktu if needed
+            // Update the displayed time with the merged time slots
+            displayTime(selectedTimeSlots)
         }
 
         // Show the popup below the dropdownButton
         popupWindow?.showAsDropDown(binding.dropdownButton)
+    }
+
+    // Fungsi untuk menampilkan waktu yang diformat
+    private fun displayTime(timeSlots: List<String>) {
+        // Tampilkan waktu dalam format yang diinginkan pada antarmuka pengguna
+        displayedTime = getCombinedTime(timeSlots)
+        binding.textViewWaktu.text = displayedTime
     }
 }

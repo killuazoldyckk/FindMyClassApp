@@ -82,10 +82,23 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
             override fun onDataChange(snapshot: DataSnapshot) {
                 user = snapshot.getValue(User::class.java)!!
                 binding.namaLengkap.text = user.nama
+                binding.status.text = if (!user.isKomting!!) "Mahasiswa" else "Komting"
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@DashboardActivity, "Failed to get user profile data", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // Add ChildEventListener for isKomting changes
+        databaseReference.child(uid).child("isKomting").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val isKomting = snapshot.getValue(Boolean::class.java) ?: false
+                binding.status.text = if (!isKomting) "Mahasiswa" else "Komting"
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
             }
         })
     }

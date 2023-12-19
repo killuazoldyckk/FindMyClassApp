@@ -161,10 +161,11 @@ class BookingClassActivity : AppCompatActivity() {
 
     private fun showWaktuDropdown() {
         val popupView = layoutInflater.inflate(R.layout.popup_waktu, null)
-        val popupWindow = PopupWindow(
+        popupWindow = PopupWindow(
             popupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true // This enables the popup to be dismissed when clicked outside
         )
 
         val waktuOptions = resources.getStringArray(R.array.waktu_options)
@@ -189,12 +190,12 @@ class BookingClassActivity : AppCompatActivity() {
         }
 
         // Set the onDismissListener to update selectedWaktu when the popup is dismissed
-        popupWindow.setOnDismissListener {
+        popupWindow?.setOnDismissListener {
             // Update selectedWaktu if needed
         }
 
         // Show the popup below the dropdownButton
-        popupWindow.showAsDropDown(binding.dropdownWaktu)
+        popupWindow?.showAsDropDown(binding.dropdownWaktu)
     }
 
     private fun getIndex(spinner: Spinner, myString: String): Int {

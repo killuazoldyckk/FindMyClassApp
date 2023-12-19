@@ -123,4 +123,15 @@
     <string name="pilih_hari">Pilih Hari</string>
     <string name="pilih_mata_kuliah">Pilih Mata Kuliah</string>
     <string name="pilih_waktu">Pilih Waktu</string>
+    <string name="nama_ruang">Nama Ruang:</string>
+    <string name="ruang_101">Ruang 101</string>
+    <string name="matkul">Matkul:</string>
+    <string name="pemrograman_mobile">Pemrograman Mobile</string>
+    <string name="hari">Hari:</string>
+    <string name="senin">Senin</string>
+    <string name="jam">Jam:</string>
+    <string name="_08_00_09_40">08.00-09.40</string>
+    <string name="status">Status:</string>
+    <string name="terisi">Terisi</string>
+    <string name="booking_btn_text">Booking</string>
 </resources>

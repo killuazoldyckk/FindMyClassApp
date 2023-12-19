@@ -11,12 +11,12 @@
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
     card_view:cardCornerRadius="10dp"
-    android:backgroundTint="@color/yellow">
+    android:backgroundTint="@color/blue">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="14dp">
 
         <TextView
             android:id="@+id/ruang_title"
@@ -24,7 +24,10 @@
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            android:text="Nama Ruang:" />
+            android:text="@string/nama_ruang"
+            android:textStyle="bold"
+            android:textColor="@color/lightblue"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/ruang_text"
@@ -33,7 +36,9 @@
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintStart_toEndOf="@id/ruang_title"
             android:layout_marginStart="6dp"
-            android:text="Ruang 101"/>
+            android:text="@string/ruang_101"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/matkul_title"
@@ -41,8 +46,11 @@
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/ruang_title"
             card_view:layout_constraintStart_toStartOf="parent"
-            android:text="Matkul:"
-            android:layout_marginTop="14dp"/>
+            android:text="@string/matkul"
+            android:layout_marginTop="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/lightblue"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/matkul_text"
@@ -50,28 +58,35 @@
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/ruang_title"
             card_view:layout_constraintStart_toEndOf="@id/matkul_title"
-            android:text="Pemrograman Mobile"
+            android:text="@string/pemrograman_mobile"
             android:layout_marginTop="14dp"
-            android:layout_marginStart="6dp"/>
+            android:layout_marginStart="6dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/hari_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hari:"
+            android:text="@string/hari"
             card_view:layout_constraintTop_toBottomOf="@id/matkul_text"
             card_view:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="14dp"/>
+            android:layout_marginTop="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/lightblue"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/hari_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Senin"
+            android:text="@string/senin"
             card_view:layout_constraintTop_toBottomOf="@id/matkul_text"
             card_view:layout_constraintStart_toEndOf="@id/hari_title"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="14dp"/>
+            android:layout_marginTop="14dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/waktu_title"
@@ -79,8 +94,11 @@
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/hari_text"
             card_view:layout_constraintStart_toStartOf="parent"
-            android:text="Jam:"
-            android:layout_marginTop="14dp"/>
+            android:text="@string/jam"
+            android:layout_marginTop="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/lightblue"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/waktu_text"
@@ -89,8 +107,10 @@
             card_view:layout_constraintTop_toBottomOf="@id/hari_text"
             card_view:layout_constraintStart_toEndOf="@id/waktu_title"
             android:layout_marginStart="6dp"
-            android:text="08.00-09.40"
-            android:layout_marginTop="14dp"/>
+            android:text="@string/_08_00_09_40"
+            android:layout_marginTop="14dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/status_title"
@@ -98,8 +118,11 @@
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@id/waktu_text"
             card_view:layout_constraintStart_toStartOf="parent"
-            android:text="Status:"
-            android:layout_marginTop="14dp"/>
+            android:text="@string/status"
+            android:layout_marginTop="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/lightblue"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/status_text"
@@ -108,18 +131,23 @@
             card_view:layout_constraintTop_toBottomOf="@id/waktu_text"
             card_view:layout_constraintStart_toEndOf="@id/status_title"
             android:layout_marginStart="6dp"
-            android:text="Terisi"
-            android:layout_marginTop="14dp"/>
+            android:text="@string/terisi"
+            android:layout_marginTop="14dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/booking_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             card_view:layout_constraintTop_toBottomOf="@+id/status_text"
-            android:text="Booking"
+            android:text="@string/booking_btn_text"
             android:textAllCaps="false"
+            android:textSize="16sp"
+            android:background="@drawable/bookingbg"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"/>
+            card_view:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="3dp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package com.cc.findmyclasskotlin
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +9,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.cc.findmyclasskotlin.databinding.ActivityAddNewClassBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class AddNewClassActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddNewClassBinding
@@ -25,6 +31,7 @@ class AddNewClassActivity : AppCompatActivity() {
     private lateinit var matkulAdapter: ArrayAdapter<String>
     private lateinit var dropdownPopup: PopupWindow
     private val selectedTimeSlots = mutableListOf<String>()
+    private var popupWindow: PopupWindow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +45,13 @@ class AddNewClassActivity : AppCompatActivity() {
 
         // Initialize the spinner
         val ruangSpinner = binding.dropdownRuang
+
+        val exitBtn: ImageView = findViewById(R.id.exit_btn)
+        exitBtn.setOnClickListener {
+            val backToDashboard = Intent(this, DashboardActivity::class.java)
+            startActivity(backToDashboard)
+        }
+
 
         // Initialize the serachView
         val matkulSearch = binding.searchViewMatkul
@@ -152,11 +166,12 @@ class AddNewClassActivity : AppCompatActivity() {
         })
 
         binding.dropdownButton.setOnClickListener {
-            // Show popup menu for selecting time slots
-            showWaktuDropdown()
+            // Toggle the visibility of the waktu dropdown
+            toggleWaktuDropdown()
         }
 
         binding.bookingBtn.setOnClickListener {
+
             // Get user inputs
             val ruang = binding.dropdownRuang.selectedItem.toString()
             val hari = binding.dropdownHari.selectedItem.toString()
@@ -170,42 +185,84 @@ class AddNewClassActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Create a Room object
-            val room = Room(
-                namaRuang = ruang,
-                matkul = selectedMatkul,
-                hari = hari,
-                jam = jam,
-                status = "Terisi",
-                stambuk = "2021", // You can set the value as needed
-                kom = "B" // You can set the value as needed
-            )
+            // Query to check if data with the same namaRuang, hari, and jam exists
+            val matchingQuery = database.orderByChild("namaRuang")
+                .equalTo(ruang)
 
-            // Push the data to the Realtime Database
-            val newClassRef = database.push()
-            newClassRef.setValue(room, object : DatabaseReference.CompletionListener {
-                override fun onComplete(error: DatabaseError?, ref: DatabaseReference) {
-                    if (error == null) {
-                        // Data was successfully written
-                        finish()
-                    } else {
-                        // Handle the error
-                        val errorMessage = "Failed to save data: ${error.message}"
-                        Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
+            matchingQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    var isClassBooked = false
+
+                    for (snapshot in dataSnapshot.children) {
+                        val room = snapshot.getValue(Room::class.java)
+                        val roomKey = snapshot.key
+
+                        if ((room != null) && (roomKey != null)) {
+                            if (ruang == room.namaRuang && hari == room.hari && jam == room.jam) {
+                                isClassBooked = true
+                                break
+                            }
+                        }
                     }
+
+                    if (isClassBooked) {
+                        // Tampilkan pesan bahwa kelas sudah dibooking
+                        // Misalnya, dengan Toast
+                        Toast.makeText(this@AddNewClassActivity, "Kelas tersebut sudah dibooking", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Create a Room object
+                        val room = Room(
+                            namaRuang = ruang,
+                            matkul = selectedMatkul,
+                            hari = hari,
+                            jam = jam,
+                            status = "Terisi",
+                            stambuk = "2021", // You can set the value as needed
+                            kom = "B" // You can set the value as needed
+                        )
+
+                        // Push the data to the Realtime Database
+                        val newClassRef = database.push()
+                        newClassRef.setValue(room, object : DatabaseReference.CompletionListener {
+                            override fun onComplete(error: DatabaseError?, ref: DatabaseReference) {
+                                if (error == null) {
+                                    // Data was successfully written
+                                    finish()
+                                } else {
+                                    // Handle the error
+                                    val errorMessage = "Failed to save data: ${error.message}"
+                                    Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        })
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle the error if needed
                 }
             })
         }
 
     }
 
+    private fun toggleWaktuDropdown() {
+        // If the popup is showing, dismiss it; otherwise, show it
+        if (popupWindow?.isShowing == true) {
+            popupWindow?.dismiss()
+        } else {
+            showWaktuDropdown()
+        }
+    }
+
     // Function to show the waktu dropdown
     private fun showWaktuDropdown() {
         val popupView = layoutInflater.inflate(R.layout.popup_waktu, null)
-        val popupWindow = PopupWindow(
+        popupWindow = PopupWindow(
             popupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true // This enables the popup to be dismissed when clicked outside
         )
 
         val waktuOptions = resources.getStringArray(R.array.waktu_options)
@@ -230,11 +287,11 @@ class AddNewClassActivity : AppCompatActivity() {
         }
 
         // Set the onDismissListener to update selectedWaktu when the popup is dismissed
-        popupWindow.setOnDismissListener {
+        popupWindow?.setOnDismissListener {
             // Update selectedWaktu if needed
         }
 
         // Show the popup below the dropdownButton
-        popupWindow.showAsDropDown(binding.dropdownButton)
+        popupWindow?.showAsDropDown(binding.dropdownButton)
     }
 }

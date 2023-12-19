@@ -22,6 +22,7 @@ class BookingClassActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBookingClassBinding
     private lateinit var database: DatabaseReference
     private val selectedTimeSlots = mutableListOf<String>()
+    private var popupWindow: PopupWindow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,7 @@ class BookingClassActivity : AppCompatActivity() {
 
         binding.dropdownWaktu.setOnClickListener {
             // Show popup menu for selecting time slots
-            showWaktuDropdown()
+            toggleWaktuDropdown()
         }
 
 
@@ -147,6 +148,15 @@ class BookingClassActivity : AppCompatActivity() {
                 // Handle errors if needed
             }
         })
+    }
+
+    private fun toggleWaktuDropdown() {
+        // If the popup is showing, dismiss it; otherwise, show it
+        if (popupWindow?.isShowing == true) {
+            popupWindow?.dismiss()
+        } else {
+            showWaktuDropdown()
+        }
     }
 
     private fun showWaktuDropdown() {

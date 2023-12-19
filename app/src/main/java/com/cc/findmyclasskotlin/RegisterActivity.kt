@@ -20,6 +20,11 @@ class RegisterActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
+        binding.backButton.setOnClickListener {
+            val goToLogin = Intent(this, LoginActivity::class.java)
+            startActivity(goToLogin)
+        }
+
         binding.registerBtn.setOnClickListener {
             val nim = binding.editTextNIM.text.toString()
             val password = binding.editTextPassword.text.toString()

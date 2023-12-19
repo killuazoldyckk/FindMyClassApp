@@ -54,6 +54,16 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
             val goToAddNewClassActivity = Intent(this,AddNewClassActivity::class.java)
             startActivity(goToAddNewClassActivity)
         }
+
+        binding.historyBtn.setOnClickListener{
+            val goToHistoryActivity = Intent(this,HistoryActivity::class.java)
+            startActivity(goToHistoryActivity)
+        }
+
+        binding.profileBtn.setOnClickListener{
+            val gotToProfieActivity = Intent(this,ProfileActivity::class.java)
+            startActivity(gotToProfieActivity)
+        }
     }
 
     override fun onItemClick(position: Int) {

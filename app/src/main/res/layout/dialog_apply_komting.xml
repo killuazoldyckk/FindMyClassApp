@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bookingbg"
+    android:padding="16dp">
+
+    <!-- TextView for the dialog content -->
+    <TextView
+        android:id="@+id/applyTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply as komting?"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Buttons for Yes and No -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Yes button -->
+        <Button
+            android:id="@+id/yesButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:fontFamily="@font/poppins_bold"
+            android:textStyle="bold"
+            android:textColor="@color/blue"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- No button -->
+        <Button
+            android:id="@+id/noButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_bold"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textStyle="bold"
+            android:textColor="@color/blue"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+</LinearLayout>

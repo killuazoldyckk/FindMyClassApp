@@ -33,6 +33,7 @@ class ListClassAdapter(private val listRooms: ArrayList<Room>): RecyclerView.Ada
         // Mengubah format waktu sesuai keinginan
         val formattedTime = currentItem.jam?.let { formatClassTime(it) }
         holder.jam.text = formattedTime
+        holder.hari.text = currentItem.hari
         holder.status.text = currentItem.status
 
     }

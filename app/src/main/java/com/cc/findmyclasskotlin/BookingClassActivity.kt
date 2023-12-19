@@ -10,6 +10,7 @@ import android.widget.PopupWindow
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import com.cc.findmyclasskotlin.databinding.ActivityBookingClassBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -172,7 +173,6 @@ class BookingClassActivity : AppCompatActivity() {
         )
 
         val waktuOptions = resources.getStringArray(R.array.waktu_options)
-
         val waktuCheckBoxGroup = popupView.findViewById<LinearLayout>(R.id.waktuCheckBoxGroup)
 
         // Inflate the waktu checkbox options dynamically
@@ -182,6 +182,8 @@ class BookingClassActivity : AppCompatActivity() {
             checkBox.text = option
             waktuCheckBoxGroup.addView(checkBox)
 
+            // Check if the option is in selectedTimeSlots and mark the checkbox accordingly
+            checkBox.isChecked = selectedTimeSlots.contains(option)
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 // Handle the checkbox selection
                 if (isChecked) {
@@ -190,6 +192,22 @@ class BookingClassActivity : AppCompatActivity() {
                     selectedTimeSlots.remove(option)
                 }
             }
+        }
+
+        // Uncheck all checkboxes first
+        waktuCheckBoxGroup.children.forEach { view ->
+            if (view is CheckBox) {
+                view.isChecked = false
+            }
+        }
+
+        val timeSlots = storedTime.split(",")
+
+        timeSlots.forEach { timeSlot ->
+            val trimmedTimeSlot = timeSlot.trim()
+            val checkbox = waktuCheckBoxGroup.findViewWithTag<CheckBox>(trimmedTimeSlot)
+
+            checkbox?.isChecked = true
         }
 
         // Set the onDismissListener to update selectedWaktu when the popup is dismissed
@@ -201,6 +219,9 @@ class BookingClassActivity : AppCompatActivity() {
         // Show the popup below the dropdownButton
         popupWindow?.showAsDropDown(binding.dropdownWaktu)
     }
+
+
+
 
     // Fungsi untuk menampilkan waktu yang diformat
     private fun displayTime(timeSlots: List<String>) {
@@ -225,8 +246,6 @@ class BookingClassActivity : AppCompatActivity() {
 
         return "$startTime - $endTime"
     }
-
-// ...
 
 
     // Function to combine time slots into the desired format

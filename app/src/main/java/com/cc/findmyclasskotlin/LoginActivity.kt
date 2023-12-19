@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.cc.findmyclasskotlin.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -17,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        installSplashScreen()
 
         val firebaseAuth = FirebaseAuth.getInstance();
 

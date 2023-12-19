@@ -60,6 +60,18 @@
 
     <string name="booking">Booking</string>
 
+    <array name="waktu_options">
+        <item>08.00 - 08.50</item>
+        <item>08.50 - 09.40</item>
+        <item>09.40 - 10.30</item>
+        <item>10.30 - 11.20</item>
+        <item>11.20 - 12.10</item>
+        <item>12.10 - 13.00</item>
+        <item>13.00 - 13.50</item>
+        <item>13.50 - 14.40</item>
+        <item>14.40 - 15.30</item>
+        <item>15.30 - 16.20</item>
+    </array>
 
     <string name="cdImageView">Gambar</string>
     <string name="ruang_kosong">Ruang Kosong</string>
@@ -110,4 +122,5 @@
     <string name="pilih_ruangan">Pilih Ruangan</string>
     <string name="pilih_hari">Pilih Hari</string>
     <string name="pilih_mata_kuliah">Pilih Mata Kuliah</string>
+    <string name="pilih_waktu">Pilih Waktu</string>
 </resources>

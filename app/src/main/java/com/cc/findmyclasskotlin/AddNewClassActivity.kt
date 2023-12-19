@@ -208,7 +208,7 @@ class AddNewClassActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        // val waktuOptions = resources.getStringArray(R.array.waktu_options)
+         val waktuOptions = resources.getStringArray(R.array.waktu_options)
 
         val waktuCheckBoxGroup = popupView.findViewById<LinearLayout>(R.id.waktuCheckBoxGroup)
 

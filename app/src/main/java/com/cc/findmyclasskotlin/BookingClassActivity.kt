@@ -38,6 +38,8 @@ class BookingClassActivity : AppCompatActivity() {
         }
 
         binding.bookingBtn.setOnClickListener {
+            val selectedRoom = intent.getParcelableExtra<Room>("SELECTED_ROOM")
+
             val namaRuang = binding.dropdownRuang.selectedItem.toString()
             val matkul = binding.editTextMatkul.text.toString()
             val hari = binding.dropdownHari.selectedItem.toString()
@@ -51,8 +53,8 @@ class BookingClassActivity : AppCompatActivity() {
                     for (snapshot in dataSnapshot.children) {
                         val room = snapshot.getValue(Room::class.java)
                         val roomKey = snapshot.key
-                        if ((room != null) && (roomKey != null)) {
 
+                        if ((room != null) && (roomKey != null) && (selectedRoom?.schedID == room.schedID)) {
                             // Update data in Firebase
                             val updateData: MutableMap<String, Any> = HashMap()
                             updateData["namaRuang"] = namaRuang

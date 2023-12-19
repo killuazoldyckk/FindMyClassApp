@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Room(
+    val schedID: String?= null,
     val namaRuang: String?= null,
     val matkul: String?= null,
     val hari: String?= null,

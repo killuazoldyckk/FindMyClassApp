@@ -34,10 +34,7 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
 
-        if (uid.isNotEmpty()) {
-
-            getUserData()
-        }
+        getUserData()
 
         classRecyclerView = findViewById(R.id.class_list)
         classRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -77,31 +74,35 @@ class DashboardActivity : AppCompatActivity(), ListClassAdapter.OnItemClickListe
     }
 
     private fun getUserData() {
-
-        databaseReference.child(uid).addValueEventListener(object : ValueEventListener{
+        databaseReference.child(uid).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 user = snapshot.getValue(User::class.java)!!
                 binding.namaLengkap.text = user.nama
-                binding.status.text = if (!user.isKomting!!) "Mahasiswa" else "Komting"
+
+                val isKomting = user.isKomting ?: false
+
+                // Perbarui status sesuai dengan isKomting
+                binding.status.text = if (!isKomting) "Mahasiswa" else "Komting"
+
+                // Pastikan untuk memperbarui status di UI saat isKomting berubah
+                databaseReference.child(uid).child("isKomting").addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val isKomtingFromFirebase = snapshot.getValue(Boolean::class.java) ?: false
+                        binding.status.text = if (!isKomtingFromFirebase) "Mahasiswa" else "Komting"
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle error if needed
+                    }
+                })
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@DashboardActivity, "Failed to get user profile data", Toast.LENGTH_SHORT).show()
             }
         })
-
-        // Add ChildEventListener for isKomting changes
-        databaseReference.child(uid).child("isKomting").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val isKomting = snapshot.getValue(Boolean::class.java) ?: false
-                binding.status.text = if (!isKomting) "Mahasiswa" else "Komting"
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-        })
     }
+
 
     private fun getClassData() {
 

@@ -36,6 +36,7 @@ class BookingClassActivity : AppCompatActivity() {
         val selectedRoom = intent.getParcelableExtra<Room>("SELECTED_ROOM")
         val isPreFilled = intent.getBooleanExtra("PRE_FILLED", false)
 
+
         // Mengisi field sesuai dengan data yang diterima
         if (isPreFilled && selectedRoom != null) {
             val ruangAdapter = binding.dropdownRuang.adapter
@@ -53,6 +54,8 @@ class BookingClassActivity : AppCompatActivity() {
             val formattedTime = selectedRoom.jam?.let { formatClassTime(it) }
             binding.textViewWaktu.text = formattedTime ?: ""
 
+            storedTime = selectedRoom.jam ?: ""
+
             val statusAdapter = binding.dropdownStatus.adapter
             if (statusAdapter != null) {
                 binding.dropdownStatus.setSelection(getIndex(binding.dropdownStatus, selectedRoom.status ?: ""))
@@ -61,6 +64,9 @@ class BookingClassActivity : AppCompatActivity() {
 
         binding.dropdownWaktu.setOnClickListener {
             // Show popup menu for selecting time slots
+            if (selectedRoom != null) {
+                storedTime = selectedRoom.jam ?: ""
+            }
             toggleWaktuDropdown()
         }
 
@@ -180,7 +186,6 @@ class BookingClassActivity : AppCompatActivity() {
             val checkBox = CheckBox(this)
             checkBox.id = index
             checkBox.text = option
-            waktuCheckBoxGroup.addView(checkBox)
 
             // Check if the option is in selectedTimeSlots and mark the checkbox accordingly
             checkBox.isChecked = selectedTimeSlots.contains(option)
@@ -192,16 +197,21 @@ class BookingClassActivity : AppCompatActivity() {
                     selectedTimeSlots.remove(option)
                 }
             }
+
+            waktuCheckBoxGroup.addView(checkBox)
         }
+
+        val timeSlots = storedTime.split(",")
 
         // Uncheck all checkboxes first
         waktuCheckBoxGroup.children.forEach { view ->
             if (view is CheckBox) {
-                view.isChecked = false
+                val trimmedText = view.text.toString().trim()
+                if (timeSlots.any { it.trim() == trimmedText }) {
+                    view.isChecked = true
+                }
             }
         }
-
-        val timeSlots = storedTime.split(",")
 
         timeSlots.forEach { timeSlot ->
             val trimmedTimeSlot = timeSlot.trim()

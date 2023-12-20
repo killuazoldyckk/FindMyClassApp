@@ -236,9 +236,16 @@ class BookingClassActivity : AppCompatActivity() {
     // Fungsi untuk menampilkan waktu yang diformat
     private fun displayTime(timeSlots: List<String>) {
         // Tampilkan waktu dalam format yang diinginkan pada antarmuka pengguna
-        displayedTime = getCombinedTime(timeSlots)
-        binding.textViewWaktu.text = displayedTime
+        if (timeSlots.isEmpty()) {
+            displayedTime = ""
+            binding.textViewWaktu.text = displayedTime
+            storedTime = "" // Update storedTime menjadi kosong
+        } else {
+            displayedTime = getCombinedTime(timeSlots)
+            binding.textViewWaktu.text = displayedTime
+        }
     }
+
 
     // ...
 
